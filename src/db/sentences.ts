@@ -53,19 +53,6 @@ export function createTables() {
   runQuery(qSentencesJapanese);
 }
 
-
-// function mapRowToModel(row: any[]) {
-//   const [id, name, key] = row;
-
-//   const model: Sentence = {
-//     id,
-//     name,
-//     key,
-//   };
-
-//   return model;
-// }
-
 export function getAll() {
   const query =
     `SELECT * FROM ${TABLE_SENTENCES.NAME} ` +
@@ -134,8 +121,47 @@ export function insert(sentence: SentenceInsert) {
     runQuery(querySentenceJapanese, querySentenceJapaneseValues);
   })
 
+  return true;
+}
 
+export function update(sentence: Sentence) {
+  const querySentence =
+    `UPDATE ${TABLE_SENTENCES.NAME} ` +
+    `SET ${TABLE_SENTENCES.COLUMN.ENGLISH} = '${sentence.en}'` +
+    `WHERE ${TABLE_SENTENCES.COLUMN.ID} = '${sentence.id}'`;
 
+  if (get('DB_LOG_QUERY')) {
+    console.log(`${TABLE_SENTENCES.NAME} update\n`, querySentence);
+  }
+  runQuery(querySentence);
+
+  const querySentenceJapaneseDelete =
+    `DELETE FROM ${TABLE_SENTENCE_JAPANESE.NAME} ` +
+    `WHERE ${TABLE_SENTENCE_JAPANESE.COLUMN.SENTENCE_ID} = '${sentence.id}'`;
+
+  if (get('DB_LOG_QUERY')) {
+    console.log(`${TABLE_SENTENCES.NAME} delete\n`, querySentenceJapaneseDelete);
+  }
+  runQuery(querySentenceJapaneseDelete);
+
+  const querySentenceJapanese =
+  `INSERT INTO ${TABLE_SENTENCE_JAPANESE.NAME} ` +
+  `(` +
+  `${TABLE_SENTENCE_JAPANESE.COLUMN.SENTENCE_ID}, ` +
+  `${TABLE_SENTENCE_JAPANESE.COLUMN.JAPANESE}` +
+  `) VALUES (?, ?)`;
+
+  sentence.ja.forEach(x => {
+    const querySentenceJapaneseValues = [
+      sentence.id,
+      x,
+    ];
+
+    if (get('DB_LOG_QUERY')) {
+      console.log(`${TABLE_SENTENCE_JAPANESE.NAME} insert\n`, querySentenceJapanese, querySentenceJapaneseValues);
+    }
+    runQuery(querySentenceJapanese, querySentenceJapaneseValues);
+  })
 
   return true;
 }
