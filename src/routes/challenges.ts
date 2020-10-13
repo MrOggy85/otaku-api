@@ -1,5 +1,9 @@
-import { getChallengeByKey, getChallenges } from "./db.ts";
-import { Router } from "./deps.ts";
+import type { Router } from "../deps.ts";
+import type { Context } from "../types.ts";
+import {
+  getAll as getAllChallenges,
+  getByKey as getChallengeByKey,
+} from '../db/challenges.ts';
 
 const ROUTE = "/challenges";
 
@@ -9,12 +13,8 @@ export function init(router: Router) {
     .get(`${ROUTE}/:key`, getByKey)
 }
 
-type Get = Router['get'];
-type Middeware = Parameters<Get>[1];
-type Context = Parameters<Middeware>[0];
-
 function getAll(ctx: Context) {
-  const challenges = getChallenges();
+  const challenges = getAllChallenges();
 
   ctx.response.body = challenges;
 }

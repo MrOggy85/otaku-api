@@ -1,28 +1,14 @@
-import { init } from "./challenges.ts";
-import { getChallengeByKey, getChallenges, initDB, insertChallenge } from "./db.ts";
+import { init as initChallengesRoutes } from "./routes/challenges.ts";
+import { init as initSentencesRoutes } from "./routes/sentences.ts";
 import { Application, Router, config } from "./deps.ts";
-import { printDiagnostic } from './diagnostics.ts';
-import { challenges } from './exampleData.ts';
+import { printDiagnostic } from './debug/diagnostics.ts';
+import initDb from "./db/init.ts";
 
 if (config().RUN_DIAGNOSTICS === '1') {
   printDiagnostic();
 }
 
-initDB();
-
-const b = getChallengeByKey('Banana');
-console.log('challenge banana', b);
-
-challenges.forEach(x => {
-  const challenge = getChallengeByKey(x.key);
-  console.log('challenge', challenge);
-  if (!challenge) {
-    insertChallenge(x);
-  }
-});
-
-const hej = getChallenges();
-console.log('hej', hej);
+initDb();
 
 const app = new Application();
 
@@ -39,7 +25,8 @@ router
     context.response.body = "Hello world!";
   });
 
-init(router);
+initChallengesRoutes(router);
+initSentencesRoutes(router);
 
 app.use(router.routes());
 app.use(router.allowedMethods());

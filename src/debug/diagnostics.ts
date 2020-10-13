@@ -1,5 +1,3 @@
-import { config } from "./deps.ts";
-
 const envVars = [
   'HOME',
   'PATH',
