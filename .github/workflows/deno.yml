@@ -37,6 +37,3 @@ jobs:
       
       - name: Run Lint
         run: deno lint --unstable ./src
-
-      - name: Run Tests
-        run: deno test -A --unstable
