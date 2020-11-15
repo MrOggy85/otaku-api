@@ -1,11 +1,11 @@
 
 const challenge1 = {
   name: 'Test1',
-  key: 'TEST-1',
+  tagIds: [],
 }
 const challenge2 = {
   name: 'Test2',
-  key: 'TEST-2',
+  tagIds: [],
 }
 
  export const challenges = [
@@ -17,11 +17,13 @@ const challenge2 = {
  const sentence1 = {
    en: 'Good Morning',
    ja: ['おはようございます'],
+   tagIds: [],
  }
 
  const sentence2 = {
   en: 'The weather is nice today',
   ja: ['今日はいい天気ですね', 'きょうはいいてんきですね'],
+  tagIds: [],
 }
 
 export const sentences = [

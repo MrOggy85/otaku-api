@@ -4,7 +4,6 @@ import {
 } from "../debug/exampleData.ts";
 import {
   createTable as createChallengesTable,
-  getByKey,
   insert as insertChallenge,
 } from "./challenges.ts";
 import {
@@ -12,14 +11,18 @@ import {
   getAll,
   insert as insertSentence,
 } from "./sentences.ts";
+import {
+  createTables as createTagsTables,
+} from './tags.ts';
 
 export default function  init() {
   createChallengesTable();
   createSentencesTables();
+  createTagsTables();
 
   challenges.forEach(x => {
-    const challenge = getByKey(x.key);
-    if (!challenge) {
+    const challenge = getAll();
+    if (challenge.length === 0) {
       insertChallenge(x);
     }
   });
