@@ -44,7 +44,7 @@ function createTags() {
   const id = TABLE_TAGS.COLUMN.ID;
   const name = TABLE_TAGS.COLUMN.NAME;
 
-  let query =
+  const query =
     `CREATE TABLE IF NOT EXISTS ${tableName} ` +
     "(" +
     `${id} CHAR(36) PRIMARY KEY NOT NULL, ` +

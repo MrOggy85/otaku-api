@@ -82,12 +82,10 @@ async function insert(ctx: Context) {
 }
 
 async function update(ctx: Context) {
-  let value: UpdateSentence;
   const result = ctx.request.body({
     type: 'json',
   });
-  value = await result.value;
-  const { id, en, ja, tagIds } = value
+  const { id, en, ja, tagIds }: UpdateSentence = await result.value;
   if (!id) {
     ctx.throw(400, '"id" is empty');
   }

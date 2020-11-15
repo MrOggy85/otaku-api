@@ -58,7 +58,7 @@ export function createTables() {
 
 // deno-lint-ignore no-explicit-any
 function mapRowToModel(row: any[]) {
-  const [id, en, id_japanese, sentenceId, japanese] = row;
+  const [id, en, japaneseId, sentenceId, japanese] = row;
 
   const sentence: Sentence = {
     id,
@@ -84,7 +84,7 @@ export function getAll() {
 
   const sentences: Record<Sentence['id'], Sentence> = {};
   for (const row of rows) {
-    const [id, en, id_japanese, sentenceId, japanese] = row;
+    const [id, en, japaneseId, sentenceId, japanese] = row;
     if (!sentences[id]) {
       sentences[id] = mapRowToModel(row)
 
