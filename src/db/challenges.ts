@@ -159,8 +159,8 @@ export function update(challenge: ChallengeUpdate) {
       })
     } catch (error) {
       switch (getErrorCode(error)) {
-        case 'FOREIGN KEY':
-          throw new DbError(`tagId ${tagId} does not exist`, 'FOREIGN KEY', 'tags')
+        case 'FOREIGN_KEY':
+          throw new DbError(`tagId ${tagId} does not exist`, 'FOREIGN_KEY', 'tags')
 
         default:
           throw error
@@ -178,7 +178,7 @@ export function remove(challengeId: Challenge['id']) {
     console.log(`${TABLE.NAME} remove\n`, query);
   }
 
-  runQuery(query);
-
   removeAllTagChallenge(challengeId);
+
+  runQuery(query);
 }

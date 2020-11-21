@@ -241,6 +241,8 @@ export function updateTag(tag: Tag) {
 }
 
 export function deleteTag(tagId: Tag['id']) {
+  removeAllTagForeign(tagId);
+
   const query =
     `DELETE FROM ${TABLE_TAGS.NAME} ` +
     `WHERE ${TABLE_TAGS.COLUMN.ID} = '${tagId}'`;
@@ -353,6 +355,30 @@ export function removeAllTagSentence(sentenceId: TagSentence['sentenceId']) {
   if (get('DB_LOG_QUERY')) {
     console.log(
       `${TABLE_TAGS_SENTENCES.NAME} remove all\n`, query);
+  }
+
+  runQuery(query);
+}
+
+export function removeAllTagForeign(id: Tag['id']) {
+  let query =
+    `DELETE FROM ${TABLE_TAGS_SENTENCES.NAME} ` +
+    `WHERE ${TABLE_TAGS_SENTENCES.COLUMN.TAG_ID} = '${id}'`;
+
+  if (get('DB_LOG_QUERY')) {
+    console.log(
+      `${TABLE_TAGS_SENTENCES.NAME} remove all\n`, query);
+  }
+
+  runQuery(query);
+
+  query =
+    `DELETE FROM ${TABLE_TAGS_CHALLENGES.NAME} ` +
+    `WHERE ${TABLE_TAGS_CHALLENGES.COLUMN.TAG_ID} = '${id}'`;
+
+  if (get('DB_LOG_QUERY')) {
+    console.log(
+      `${TABLE_TAGS_CHALLENGES.NAME} remove all\n`, query);
   }
 
   runQuery(query);

@@ -51,11 +51,17 @@ async function insert(ctx: Context) {
     ctx.throw(400, '"name" is empty');
   }
 
-  const success = insertTag({
-    name,
-  });
-
-  ctx.response.body = success;
+  try {
+    const success = insertTag({
+      name,
+    });
+    ctx.response.body = success;
+  } catch (error) {
+    if (error.message === 'UNIQUE constraint failed: tags.name') {
+      ctx.throw(400, 'Name taken');
+    }
+    ctx.throw(500, error.message);
+  }
 }
 
 async function update(ctx: Context) {

@@ -132,8 +132,8 @@ function insertTags(tagIds: Sentence['tags'][0]['id'][], sentenceId: Sentence['i
       })
     } catch (error) {
       switch (getErrorCode(error)) {
-        case 'FOREIGN KEY':
-          throw new DbError(`tagId ${tagId} does not exist`, 'FOREIGN KEY', 'tags')
+        case 'FOREIGN_KEY':
+          throw new DbError(`tagId ${tagId} does not exist`, 'FOREIGN_KEY', 'tags')
 
         default:
           throw error;
