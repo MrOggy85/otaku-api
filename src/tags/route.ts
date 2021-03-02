@@ -1,4 +1,5 @@
 import { createHttpError, Router, SqliteError } from "../deps.ts";
+import { getIdParam } from "../routeValidation.ts";
 import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
 
@@ -11,13 +12,10 @@ async function getAll(ctx: Context) {
 }
 
 async function getById(ctx: Context) {
-  const idParam = ctx.params.id;
-  if (!idParam) {
-    ctx.throw(400, "no id provided");
-  }
+  const id = getIdParam(ctx);
 
   try {
-    const model = await handler.getById(Number(idParam));
+    const model = await handler.getById(Number(id));
     ctx.response.body = model;
   } catch (error) {
     if (error instanceof SqliteError) {
@@ -90,17 +88,10 @@ async function update(ctx: Context) {
 }
 
 async function remove(ctx: Context) {
-  const id = ctx.params.id;
-  if (!id) {
-    ctx.throw(400, "no id provided");
-  }
-  const idAsNumber = Number(id);
-  if (!Number.isInteger(idAsNumber)) {
-    ctx.throw(400, '"id" is not a number');
-  }
+  const id = getIdParam(ctx);
 
   try {
-    await handler.remove(idAsNumber);
+    await handler.remove(id);
   } catch (error) {
     if (error instanceof SqliteError) {
       ctx.throw(400, error.message);

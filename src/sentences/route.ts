@@ -100,17 +100,10 @@ async function update(ctx: Context) {
 }
 
 async function remove(ctx: Context) {
-  const id = ctx.params.id;
-  if (!id) {
-    ctx.throw(400, "no id provided");
-  }
-  const idAsNumber = Number(id);
-  if (!Number.isInteger(idAsNumber)) {
-    ctx.throw(400, '"id" is not a number');
-  }
+  const id = getIdParam(ctx);
 
   try {
-    await handler.remove(idAsNumber);
+    await handler.remove(id);
   } catch (error) {
     if (error instanceof SqliteError) {
       ctx.throw(400, error.message);
