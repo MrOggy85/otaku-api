@@ -1,23 +1,21 @@
 import { createHttpError, Router, SqliteError } from "../deps.ts";
+import { getIdParam } from "../routeValidation.ts";
 import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
 
 const ROUTE = "/challenges";
 
 async function getAll(ctx: Context) {
-  const challenges = await handler.getAll();
+  const models = await handler.getAll();
 
-  ctx.response.body = challenges;
+  ctx.response.body = models;
 }
 
 async function getById(ctx: Context) {
-  const idParam = ctx.params.id;
-  if (!idParam) {
-    ctx.throw(400, "no id provided");
-  }
+  const id = getIdParam(ctx);
 
   try {
-    const model = await handler.getById(Number(idParam));
+    const model = await handler.getById(id);
     ctx.response.body = model;
   } catch (error) {
     if (error instanceof SqliteError) {
@@ -25,6 +23,13 @@ async function getById(ctx: Context) {
     }
     throw error;
   }
+}
+
+async function getSentences(ctx: Context) {
+  const id = getIdParam(ctx);
+
+  const models = await handler.getSentences(id);
+  ctx.response.body = models;
 }
 
 type InsertModel = {
@@ -121,6 +126,7 @@ function init(router: Router) {
   router
     .get(ROUTE, getAll)
     .get(`${ROUTE}/:id`, getById)
+    .get(`${ROUTE}/:id/sentences`, getSentences)
     .post(`${ROUTE}`, insert)
     .put(`${ROUTE}`, update)
     .delete(`${ROUTE}/:id`, remove);

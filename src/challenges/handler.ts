@@ -1,5 +1,6 @@
 import { createHttpError } from "../deps.ts";
 import * as entity from "../db/repository/challenge.ts";
+import { getAllSentencesByChallengeId } from "../db/repository/sentence.ts";
 import { getAllByChallengeId } from "../db/repository/tag.ts";
 import { Unwrap } from "../typeHelpers.ts";
 
@@ -50,6 +51,11 @@ export async function getById(id: number) {
   const challengeModel = await getChallengeWithTags(challenge);
 
   return challengeModel;
+}
+
+export async function getSentences(id: number) {
+  const sentences = await getAllSentencesByChallengeId(id);
+  return sentences;
 }
 
 type Create = {

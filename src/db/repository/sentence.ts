@@ -1,5 +1,11 @@
 import { Model } from "../../deps.ts";
-import { Japanese, Sentence, TagSentence } from "../models.ts";
+import {
+  Challenge,
+  Japanese,
+  Sentence,
+  TagChallenge,
+  TagSentence,
+} from "../models.ts";
 import { getAllBySentenceId } from "./japanese.ts";
 
 type SentenceEntity = {
@@ -14,11 +20,6 @@ type SentenceModel = SentenceEntity & {
 
 async function getSentenceWithJapanese(sentence: SentenceEntity) {
   const ja = await getAllBySentenceId(sentence.id);
-
-  // const tagModels = japanese.map(ja => ({
-  //   id: tag.id,
-  //   name: tag.name,
-  // }))
 
   return {
     id: sentence.id,
@@ -35,9 +36,6 @@ export async function getAll() {
 
   const sentenceModels = await Promise.all(promises);
 
-  // const tags = await getSentenceWithJapanese(challenge.id);
-
-  console.log("sentenceModels", sentenceModels);
   return sentenceModels as unknown as SentenceModel[];
 }
 
@@ -46,12 +44,33 @@ export async function getById(id: number) {
   return entity as unknown as SentenceModel | undefined;
 }
 
+export async function getAllSentencesByChallengeId(id: number) {
+  const entities = await Sentence
+    .select(Sentence.field("id"), Sentence.field("en"))
+    .join(TagSentence, TagSentence.field("sentence_id"), Sentence.field("id"))
+    .join(
+      TagChallenge,
+      TagChallenge.field("tag_id"),
+      TagSentence.field("tag_id"),
+    )
+    .where(TagChallenge.field("challenge_id"), id)
+    .groupBy(Sentence.field("id"))
+    .get() as unknown as SentenceModel[];
+
+  const promises = entities.map((entity) => {
+    return getSentenceWithJapanese(entity);
+  });
+
+  const sentenceModels = await Promise.all(promises);
+
+  return sentenceModels as unknown as SentenceModel[];
+}
+
 async function createTagSentence(
   tagIds: string[],
   sentenceId: SentenceModel["id"],
 ) {
   const promises = tagIds.map((tagId) => {
-    console.log("createTagSentence...", tagId, sentenceId);
     return TagSentence.create({
       tagId: Number(tagId),
       sentenceId,
