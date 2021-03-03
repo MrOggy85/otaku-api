@@ -32,3 +32,6 @@ jobs:
       
       - name: Run Lint
         run: deno lint --unstable ./src
+      
+      - name: Run Fmt
+        run: deno fmt --check ./src
