@@ -1,7 +1,8 @@
+import { Application, Router, SqliteError } from "./deps.ts";
 import initChallengesRoutes from "./challenges/route.ts";
 import initTagsRoutes from "./tags/route.ts";
 import initSentencesRoutes from "./sentences/route.ts";
-import { Application, HttpError, isHttpError, Router } from "./deps.ts";
+import AppError from "./AppError.ts";
 
 function initServer() {
   const app = new Application();
@@ -14,15 +15,23 @@ function initServer() {
     try {
       await next();
     } catch (err) {
-      if (isHttpError(err)) {
-        const httpError = err as HttpError;
-        ctx.response.status = httpError.status;
-        ctx.response.body = httpError.message;
-      } else {
-        console.error(err);
-        ctx.response.status = 500;
-        ctx.response.body = "Internal Server Error";
+      if (err instanceof SqliteError) {
+        const sqliteError = err as SqliteError;
+        ctx.response.status = 400;
+        ctx.response.body = sqliteError.message;
+        return;
       }
+
+      if (err instanceof AppError) {
+        const appError = err as AppError;
+        ctx.response.status = appError.status;
+        ctx.response.body = appError.message;
+        return;
+      }
+
+      console.error(err);
+      ctx.response.status = 500;
+      ctx.response.body = "Internal Server Error";
     }
   });
 

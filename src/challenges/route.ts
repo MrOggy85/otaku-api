@@ -1,4 +1,5 @@
-import { createHttpError, Router, SqliteError } from "../deps.ts";
+import AppError from "../AppError.ts";
+import { Router } from "../deps.ts";
 import { getIdParam } from "../routeValidation.ts";
 import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
@@ -14,15 +15,8 @@ async function getAll(ctx: Context) {
 async function getById(ctx: Context) {
   const id = getIdParam(ctx);
 
-  try {
-    const model = await handler.getById(id);
-    ctx.response.body = model;
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  const model = await handler.getById(id);
+  ctx.response.body = model;
 }
 
 async function getSentences(ctx: Context) {
@@ -43,20 +37,13 @@ async function insert(ctx: Context) {
   });
   const { name, tagIds }: InsertModel = await result.value as InsertModel;
   if (!name || !Array.isArray(tagIds)) {
-    throw createHttpError(400, "wrong body");
+    throw new AppError("wrong body", 400);
   }
 
-  try {
-    await handler.create({
-      name,
-      tagIds,
-    });
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  await handler.create({
+    name,
+    tagIds,
+  });
 
   ctx.response.body = true;
 }
@@ -84,18 +71,11 @@ async function update(ctx: Context) {
     ctx.throw(400, '"tagIds" is not an array');
   }
 
-  try {
-    handler.update({
-      id: idAsNumber,
-      name,
-      tagIds,
-    });
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  handler.update({
+    id: idAsNumber,
+    name,
+    tagIds,
+  });
 
   ctx.response.body = true;
 }
@@ -103,14 +83,7 @@ async function update(ctx: Context) {
 async function remove(ctx: Context) {
   const id = getIdParam(ctx);
 
-  try {
-    await handler.remove(id);
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  await handler.remove(id);
 
   ctx.response.body = true;
 }

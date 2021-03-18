@@ -1,4 +1,4 @@
-import { createHttpError } from "../deps.ts";
+import AppError from "../AppError.ts";
 import * as entity from "../db/repository/challenge.ts";
 import { getAllSentencesByChallengeId } from "../db/repository/sentence.ts";
 import { getAllByChallengeId } from "../db/repository/tag.ts";
@@ -46,7 +46,7 @@ export async function getAll() {
 export async function getById(id: number) {
   const challenge = await entity.getById(id);
   if (!challenge) {
-    throw createHttpError(400, "No Challenge found");
+    throw new AppError("No Challenge found", 400);
   }
   const challengeModel = await getChallengeWithTags(challenge);
 

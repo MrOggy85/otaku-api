@@ -1,4 +1,4 @@
-import { createHttpError } from "../deps.ts";
+import AppError from "../AppError.ts";
 import * as entity from "../db/repository/tag.ts";
 
 export async function getAll() {
@@ -9,7 +9,7 @@ export async function getAll() {
 export async function getById(id: number) {
   const model = await entity.getById(id);
   if (!model) {
-    throw createHttpError(400, "No Tag found");
+    throw new AppError("No Tag found", 400);
   }
   return model;
 }

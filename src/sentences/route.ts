@@ -1,4 +1,5 @@
-import { createHttpError, Router, SqliteError } from "../deps.ts";
+import AppError from "../AppError.ts";
+import { Router, SqliteError } from "../deps.ts";
 import { getIdParam } from "../routeValidation.ts";
 import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
@@ -37,21 +38,14 @@ async function insert(ctx: Context) {
   });
   const { en, ja, tagIds }: InsertModel = await result.value;
   if (!en || !Array.isArray(ja) || !Array.isArray(tagIds)) {
-    throw createHttpError(400, "wrong body");
+    throw new AppError('wrong body', 400);
   }
 
-  try {
-    await handler.create({
-      en,
-      ja,
-      tagIds,
-    });
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  await handler.create({
+    en,
+    ja,
+    tagIds,
+  });
 
   ctx.response.body = true;
 }
@@ -82,19 +76,12 @@ async function update(ctx: Context) {
     ctx.throw(400, '"tagIds" is not an array');
   }
 
-  try {
-    await handler.update({
-      id: idAsNumber,
-      en,
-      ja,
-      tagIds,
-    });
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  await handler.update({
+    id: idAsNumber,
+    en,
+    ja,
+    tagIds,
+  });
 
   ctx.response.body = true;
 }
@@ -102,14 +89,7 @@ async function update(ctx: Context) {
 async function remove(ctx: Context) {
   const id = getIdParam(ctx);
 
-  try {
-    await handler.remove(id);
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  await handler.remove(id);
 
   ctx.response.body = true;
 }

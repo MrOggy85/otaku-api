@@ -1,4 +1,5 @@
-import { createHttpError, Router, SqliteError } from "../deps.ts";
+import AppError from "../AppError.ts";
+import { Router } from "../deps.ts";
 import { getIdParam } from "../routeValidation.ts";
 import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
@@ -14,15 +15,8 @@ async function getAll(ctx: Context) {
 async function getById(ctx: Context) {
   const id = getIdParam(ctx);
 
-  try {
-    const model = await handler.getById(Number(id));
-    ctx.response.body = model;
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  const model = await handler.getById(Number(id));
+  ctx.response.body = model;
 }
 
 type InsertModel = {
@@ -35,19 +29,12 @@ async function insert(ctx: Context) {
   });
   const { name }: InsertModel = await result.value as InsertModel;
   if (!name) {
-    throw createHttpError(400, "wrong body");
+    throw new AppError("wrong body", 400);
   }
 
-  try {
-    await handler.create({
-      name,
-    });
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  await handler.create({
+    name,
+  });
 
   ctx.response.body = true;
 }
@@ -72,17 +59,10 @@ async function update(ctx: Context) {
     ctx.throw(400, '"name" is empty');
   }
 
-  try {
-    handler.update({
-      id: idAsNumber,
-      name,
-    });
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  handler.update({
+    id: idAsNumber,
+    name,
+  });
 
   ctx.response.body = true;
 }
@@ -90,14 +70,7 @@ async function update(ctx: Context) {
 async function remove(ctx: Context) {
   const id = getIdParam(ctx);
 
-  try {
-    await handler.remove(id);
-  } catch (error) {
-    if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
-    }
-    throw error;
-  }
+  await handler.remove(id);
 
   ctx.response.body = true;
 }

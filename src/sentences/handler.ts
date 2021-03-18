@@ -1,4 +1,4 @@
-import { createHttpError } from "../deps.ts";
+import AppError from "../AppError.ts";
 import * as entity from "../db/repository/sentence.ts";
 import { getAllBySentenceId } from "../db/repository/tag.ts";
 import { Unwrap } from "../typeHelpers.ts";
@@ -45,7 +45,7 @@ export async function getAll() {
 export async function getById(id: number) {
   const sentenceModel = await entity.getById(id);
   if (!sentenceModel) {
-    throw createHttpError(400, "No Sentence found");
+    throw new AppError("No Sentence found", 400);
   }
   const sentenceModelWithTags = await getSentenceWithTags(sentenceModel);
 
