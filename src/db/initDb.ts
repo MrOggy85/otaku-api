@@ -1,6 +1,7 @@
 import { Database, SQLite3Connector } from "../deps.ts";
 import {
   Challenge,
+  Guess,
   Japanese,
   Sentence,
   Tag,
@@ -27,6 +28,7 @@ async function initDb() {
     Tag,
     Sentence,
     Japanese,
+    Guess,
   ]);
 
   await db.sync({ drop: false });

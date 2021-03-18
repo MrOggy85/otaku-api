@@ -91,3 +91,25 @@ export class Japanese extends Model {
     return this.hasOne(Sentence);
   }
 }
+
+export class Guess extends Model {
+  static table = "guess";
+  static timestamps = true;
+  static fields = {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    sentenceId: Relationships.belongsTo(Sentence),
+    challengeId: Relationships.belongsTo(Challenge),
+    correct: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+  };
+
+  static sentence() {
+    return this.hasOne(Sentence);
+  }
+}
