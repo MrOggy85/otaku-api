@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rm test.db
+
 deno run \
   --allow-run \
   --allow-env \

@@ -8,6 +8,7 @@ import {
   TagChallenge,
   TagSentence,
 } from "./models.ts";
+import seedData from "./seedData.ts";
 
 const DB_NAME = "./test.db";
 
@@ -32,6 +33,8 @@ async function initDb() {
   ]);
 
   await db.sync({ drop: false });
+
+  await seedData();
 }
 
 export default initDb;
