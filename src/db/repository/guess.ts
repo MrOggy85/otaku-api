@@ -6,7 +6,7 @@ type GuessModel = {
   sentenceId: number;
   challengeId: number;
   correct: boolean;
-} & Model
+} & Model;
 
 export async function getAll() {
   const entity = await Guess.all();

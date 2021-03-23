@@ -38,7 +38,7 @@ async function insert(ctx: Context) {
   });
   const { en, ja, tagIds }: InsertModel = await result.value;
   if (!en || !Array.isArray(ja) || !Array.isArray(tagIds)) {
-    throw new AppError('wrong body', 400);
+    throw new AppError("wrong body", 400);
   }
 
   await handler.create({

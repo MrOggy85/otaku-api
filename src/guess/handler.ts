@@ -14,7 +14,7 @@ export async function getById(id: number) {
   return model;
 }
 
-type Create = Parameters<typeof entity.create>[0]
+type Create = Parameters<typeof entity.create>[0];
 
 export async function create({ sentenceId, challengeId, correct }: Create) {
   await entity.create({

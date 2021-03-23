@@ -28,7 +28,8 @@ async function insert(ctx: Context) {
   const result = ctx.request.body({
     type: "json",
   });
-  const { sentenceId, challengeId, correct }: InsertModel = await result.value as InsertModel;
+  const { sentenceId, challengeId, correct }: InsertModel = await result
+    .value as InsertModel;
   if (!sentenceId || !challengeId || correct === undefined) {
     throw new AppError("wrong body", 400);
   }
@@ -50,7 +51,8 @@ async function update(ctx: Context) {
   const result = ctx.request.body({
     type: "json",
   });
-  const { id, sentenceId, challengeId, correct }: UpdateModel = await result.value;
+  const { id, sentenceId, challengeId, correct }: UpdateModel = await result
+    .value;
   if (!id) {
     throw new AppError('"id" is empty', 400);
   }
