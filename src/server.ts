@@ -38,7 +38,9 @@ function initServer() {
 
   // Logger
   app.use(async (ctx, next) => {
-    console.log(`${ctx.request.method} ${ctx.request.url}`);
+    console.log(
+      `[${ctx.request.ip}] ${ctx.request.method} ${ctx.request.url} - ${ctx.response.status}`,
+    );
     await next();
   });
 
