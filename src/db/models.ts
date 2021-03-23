@@ -68,9 +68,6 @@ export class Sentence extends Model {
   }
 }
 
-export const TagChallenge = Relationships.manyToMany(Tag, Challenge);
-export const TagSentence = Relationships.manyToMany(Tag, Sentence);
-
 export class Japanese extends Model {
   static table = "japanese";
   static timestamps = true;
@@ -92,6 +89,9 @@ export class Japanese extends Model {
   }
 }
 
+export const TagChallenge = Relationships.manyToMany(Tag, Challenge);
+export const TagSentence = Relationships.manyToMany(Tag, Sentence);
+
 export class Guess extends Model {
   static table = "guess";
   static timestamps = true;
@@ -105,6 +105,30 @@ export class Guess extends Model {
     challengeId: Relationships.belongsTo(Challenge),
     correct: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+  };
+
+  static sentence() {
+    return this.hasOne(Sentence);
+  }
+}
+
+export class User extends Model {
+  static table = "user";
+  static timestamps = true;
+  static fields = {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   };

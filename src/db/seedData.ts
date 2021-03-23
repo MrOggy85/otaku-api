@@ -1,9 +1,15 @@
+import { create as createUser } from "../user/handler.ts";
 import { create as createTag } from "../tags/handler.ts";
 import { create as createSentence } from "../sentences/handler.ts";
 import { create as createChallenge } from "../challenges/handler.ts";
 import { create as createGuess } from "../guess/handler.ts";
 
 async function seedData() {
+  await createUser({
+    email: "banana@email.com",
+    password: "secret",
+  });
+
   await createTag({
     name: "Tag1",
   });

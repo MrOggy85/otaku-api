@@ -7,6 +7,7 @@ import {
   Tag,
   TagChallenge,
   TagSentence,
+  User,
 } from "./models.ts";
 import seedData from "./seedData.ts";
 
@@ -25,11 +26,12 @@ async function initDb() {
   db.link([
     TagChallenge,
     TagSentence,
-    Challenge,
-    Tag,
-    Sentence,
     Japanese,
+    Sentence,
+    Tag,
     Guess,
+    User,
+    Challenge,
   ]);
 
   await db.sync({ drop: false });

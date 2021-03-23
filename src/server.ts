@@ -3,6 +3,8 @@ import initChallengesRoutes from "./challenges/route.ts";
 import initTagsRoutes from "./tags/route.ts";
 import initSentencesRoutes from "./sentences/route.ts";
 import initGuessRoutes from "./guess/route.ts";
+import initUserRoutes from "./user/route.ts";
+import initAuthRoutes from "./auth/routes.ts";
 import AppError from "./AppError.ts";
 
 function initServer() {
@@ -54,6 +56,8 @@ function initServer() {
   initSentencesRoutes(router);
   initTagsRoutes(router);
   initGuessRoutes(router);
+  initUserRoutes(router);
+  initAuthRoutes(router);
 
   app.use(router.routes());
   app.use(router.allowedMethods());

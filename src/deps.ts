@@ -11,4 +11,6 @@ export {
 } from "https://deno.land/x/denodb/mod.ts";
 import SqliteError from "https://deno.land/x/sqlite@v2.3.1/src/error.ts";
 
+export { createHash } from "https://deno.land/std/node/crypto.ts";
+
 export { SqliteError };
