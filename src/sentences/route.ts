@@ -1,7 +1,6 @@
 import AppError from "../AppError.ts";
-import { Router, SqliteError } from "../deps.ts";
+import { Router, SqliteError, Context } from "../deps.ts";
 import { getIdParam } from "../routeValidation.ts";
-import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
 
 const ROUTE = "/sentences";
@@ -20,7 +19,7 @@ async function getById(ctx: Context) {
     ctx.response.body = model;
   } catch (error) {
     if (error instanceof SqliteError) {
-      ctx.throw(400, error.message);
+      throw new AppError(error.message, 400);
     }
     throw error;
   }
@@ -60,20 +59,20 @@ async function update(ctx: Context) {
   });
   const { id, en, ja, tagIds }: UpdateModel = await result.value;
   if (!id) {
-    ctx.throw(400, '"id" is empty');
+    throw new AppError('"id" is empty', 400);
   }
   const idAsNumber = Number(id);
   if (!Number.isInteger(idAsNumber)) {
-    ctx.throw(400, '"id" is not a number');
+    throw new AppError('"id" is not a number', 400);
   }
   if (!en) {
-    ctx.throw(400, '"name" is empty');
+    throw new AppError('"name" is empty', 400);
   }
   if (!Array.isArray(ja)) {
-    ctx.throw(400, '"ja" is not an array');
+    throw new AppError('"ja" is not an array', 400);
   }
   if (!Array.isArray(tagIds)) {
-    ctx.throw(400, '"tagIds" is not an array');
+    throw new AppError('"tagIds" is not an array', 400);
   }
 
   await handler.update({

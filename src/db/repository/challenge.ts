@@ -35,11 +35,11 @@ type Create = {
 };
 
 export async function create({ name, tagIds }: Create) {
-  const challenge = await Challenge.create({
+  const { lastInsertId } = await Challenge.create({
     name,
-  }) as ChallengeModel;
+  }) as Model & { lastInsertId: number };
 
-  await createTagChallenge(tagIds, challenge.id);
+  await createTagChallenge(tagIds, lastInsertId);
 }
 
 type Update = Create & {

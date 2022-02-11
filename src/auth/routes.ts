@@ -1,6 +1,5 @@
-import { createHash, Router, uuid } from "../deps.ts";
+import { createHash, Router, Context, uuid } from "../deps.ts";
 import AppError from "../AppError.ts";
-import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
 
 const ROUTE = "/auth";
@@ -38,13 +37,13 @@ async function login(ctx: Context) {
   const body = await getJsonBody<LoginModel>(ctx);
   const { email, password } = body;
   if (!email) {
-    ctx.throw(400, '"email" is empty');
+    throw new AppError('"email" is empty', 400)
   }
   if (!password) {
-    ctx.throw(400, '"password" is empty');
+    throw new AppError('"password" is empty', 400)
   }
 
-  const success = await handler.login({ email, password });
+  await handler.login({ email, password });
 
   const authToken = createAuthToken();
   console.log("new authToken", authToken);
@@ -54,8 +53,8 @@ async function login(ctx: Context) {
   ctx.response.status = 200;
 }
 
-function authTest(ctx: Context) {
-  const authToken = ctx.cookies.get("tomato");
+async function authTest(ctx: Context) {
+  const authToken = await ctx.cookies.get("tomato");
   if (!authToken) {
     throw new AppError("No authToken found. Please Login", 401);
   }
@@ -64,8 +63,6 @@ function authTest(ctx: Context) {
   if (!user) {
     throw new AppError("Auth Failed. Please Login", 401);
   }
-
-  console.log("user", user);
 
   ctx.response.status = 200;
 }

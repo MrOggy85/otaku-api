@@ -1,6 +1,5 @@
 import { Model } from "../../deps.ts";
 import {
-  Challenge,
   Japanese,
   Sentence,
   TagChallenge,
@@ -96,12 +95,11 @@ type Create = {
 };
 
 export async function create({ en, ja, tagIds }: Create) {
-  const entity = await Sentence.create({
+  const { lastInsertId } = await Sentence.create({
     en,
-  }) as SentenceModel;
-
-  await createTagSentence(tagIds, entity.id);
-  await createJapanese(ja, entity.id);
+  }) as Model & { lastInsertId: number };
+  await createTagSentence(tagIds,lastInsertId);
+  await createJapanese(ja, lastInsertId);
 }
 
 type Update = Create & {

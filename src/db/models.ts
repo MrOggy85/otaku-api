@@ -81,7 +81,10 @@ export class Japanese extends Model {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    sentenceId: Relationships.belongsTo(Sentence),
+    sentenceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   };
 
   static sentence() {
@@ -101,8 +104,14 @@ export class Guess extends Model {
       primaryKey: true,
       autoIncrement: true,
     },
-    sentenceId: Relationships.belongsTo(Sentence),
-    challengeId: Relationships.belongsTo(Challenge),
+    sentenceId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    challengeId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     correct: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

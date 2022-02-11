@@ -1,4 +1,4 @@
-import { Application, Router, SqliteError } from "./deps.ts";
+import { Application, Context, Router, SqliteError } from "./deps.ts";
 import initChallengesRoutes from "./challenges/route.ts";
 import initTagsRoutes from "./tags/route.ts";
 import initSentencesRoutes from "./sentences/route.ts";
@@ -6,6 +6,12 @@ import initGuessRoutes from "./guess/route.ts";
 import initUserRoutes from "./user/route.ts";
 import initAuthRoutes from "./auth/routes.ts";
 import AppError from "./AppError.ts";
+
+function logger(ctx: Context) {
+  console.log(
+    `[${ctx.request.ip}] ${ctx.request.method} ${ctx.request.url} - ${ctx.response.status}`,
+  );
+}
 
 function initServer() {
   const app = new Application();
@@ -35,15 +41,9 @@ function initServer() {
       console.error(err);
       ctx.response.status = 500;
       ctx.response.body = "Internal Server Error";
+    } finally {
+      logger(ctx);
     }
-  });
-
-  // Logger
-  app.use(async (ctx, next) => {
-    console.log(
-      `[${ctx.request.ip}] ${ctx.request.method} ${ctx.request.url} - ${ctx.response.status}`,
-    );
-    await next();
   });
 
   const router = new Router();

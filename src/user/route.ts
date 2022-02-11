@@ -1,7 +1,6 @@
-import { Router } from "../deps.ts";
+import { Router, Context } from "../deps.ts";
 import AppError from "../AppError.ts";
 import { getIdParam } from "../routeValidation.ts";
-import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
 
 const ROUTE = "/user";

@@ -1,7 +1,6 @@
 import AppError from "../AppError.ts";
-import { Router } from "../deps.ts";
+import { Context, Router } from "../deps.ts";
 import { getIdParam } from "../routeValidation.ts";
-import type { Context } from "../types.ts";
 import * as handler from "./handler.ts";
 
 const ROUTE = "/challenges";
@@ -58,17 +57,17 @@ async function update(ctx: Context) {
   });
   const { id, name, tagIds }: UpdateModel = await result.value;
   if (!id) {
-    ctx.throw(400, '"id" is empty');
+    throw new AppError('"id" is empty', 400);
   }
   const idAsNumber = Number(id);
   if (!Number.isInteger(idAsNumber)) {
-    ctx.throw(400, '"id" is not a number');
+    throw new AppError('"id" is not a number', 400);
   }
   if (!name) {
-    ctx.throw(400, '"name" is empty');
+    throw new AppError('"name" is empty', 400);
   }
   if (!Array.isArray(tagIds)) {
-    ctx.throw(400, '"tagIds" is not an array');
+    throw new AppError('"tagIds" is not an array', 400);
   }
 
   handler.update({
