@@ -1,4 +1,3 @@
-export { config } from "https://deno.land/x/dotenv@v3.2.0/mod.ts";
 export { Application, Router, Context, helpers } from "https://deno.land/x/oak@v10.2.0/mod.ts";
 export { PostgresError, ConnectionError } from "https://deno.land/x/postgres@v0.14.2/mod.ts";
 
