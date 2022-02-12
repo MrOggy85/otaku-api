@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm test.db
+echo "start app..."
 
 deno run \
   --allow-run \

@@ -1,9 +1,9 @@
-import { config } from "./deps.ts";
 import { printDiagnostic } from "./debug/diagnostics.ts";
 import initDb from "./db/initDb.ts";
 import initServer from "./server.ts";
+import getEnv from "./getEnv.ts";
 
-if (config().RUN_DIAGNOSTICS === "1") {
+if (getEnv('RUN_DIAGNOSTICS') === "1") {
   printDiagnostic();
 }
 

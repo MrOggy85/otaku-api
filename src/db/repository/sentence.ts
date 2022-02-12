@@ -95,11 +95,12 @@ type Create = {
 };
 
 export async function create({ en, ja, tagIds }: Create) {
-  const { lastInsertId } = await Sentence.create({
+  const { id } = await Sentence.create({
     en,
-  }) as Model & { lastInsertId: number };
-  await createTagSentence(tagIds,lastInsertId);
-  await createJapanese(ja, lastInsertId);
+  }) as SentenceModel;
+
+  await createTagSentence(tagIds, id);
+  await createJapanese(ja, id);
 }
 
 type Update = Create & {

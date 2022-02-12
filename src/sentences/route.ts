@@ -1,5 +1,5 @@
 import AppError from "../AppError.ts";
-import { Router, SqliteError, Context } from "../deps.ts";
+import { Router, PostgresError, Context } from "../deps.ts";
 import { getIdParam } from "../routeValidation.ts";
 import * as handler from "./handler.ts";
 
@@ -18,7 +18,7 @@ async function getById(ctx: Context) {
     const model = await handler.getById(id);
     ctx.response.body = model;
   } catch (error) {
-    if (error instanceof SqliteError) {
+    if (error instanceof PostgresError) {
       throw new AppError(error.message, 400);
     }
     throw error;

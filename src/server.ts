@@ -1,4 +1,4 @@
-import { Application, Context, Router, SqliteError } from "./deps.ts";
+import { Application, Context, Router, PostgresError, ConnectionError } from "./deps.ts";
 import initChallengesRoutes from "./challenges/route.ts";
 import initTagsRoutes from "./tags/route.ts";
 import initSentencesRoutes from "./sentences/route.ts";
@@ -21,13 +21,15 @@ function initServer() {
   });
 
   app.use(async (ctx, next) => {
+    let isFatal = false;
+
     try {
       await next();
     } catch (err) {
-      if (err instanceof SqliteError) {
-        const sqliteError = err as SqliteError;
+      if (err instanceof PostgresError) {
+        const postgresError = err as PostgresError;
         ctx.response.status = 400;
-        ctx.response.body = sqliteError.message;
+        ctx.response.body = postgresError.message;
         return;
       }
 
@@ -38,11 +40,21 @@ function initServer() {
         return;
       }
 
+      if (err instanceof ConnectionError) {
+        // e.g. The session was terminated by the database
+        isFatal = true;
+      }
+
       console.error(err);
       ctx.response.status = 500;
       ctx.response.body = "Internal Server Error";
     } finally {
       logger(ctx);
+      if (isFatal) {
+        setTimeout(() => {
+          Deno.exit(1);
+        }, 1);
+      }
     }
   });
 
