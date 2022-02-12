@@ -84,7 +84,7 @@ export class Japanese extends Model {
     sentenceId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    }
+    },
   };
 
   static sentence() {

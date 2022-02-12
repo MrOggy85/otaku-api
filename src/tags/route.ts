@@ -1,5 +1,5 @@
 import AppError from "../AppError.ts";
-import { Router, Context } from "../deps.ts";
+import { Context, Router } from "../deps.ts";
 import { getIdParam } from "../routeValidation.ts";
 import * as handler from "./handler.ts";
 

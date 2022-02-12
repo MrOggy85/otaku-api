@@ -1,4 +1,4 @@
-import { Router, Context } from "../deps.ts";
+import { Context, Router } from "../deps.ts";
 import AppError from "../AppError.ts";
 import { getIdParam } from "../routeValidation.ts";
 import * as handler from "./handler.ts";

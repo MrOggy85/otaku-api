@@ -1,4 +1,4 @@
-import { createHash, Router, Context, uuid } from "../deps.ts";
+import { Context, createHash, Router, uuid } from "../deps.ts";
 import AppError from "../AppError.ts";
 import * as handler from "./handler.ts";
 
@@ -37,10 +37,10 @@ async function login(ctx: Context) {
   const body = await getJsonBody<LoginModel>(ctx);
   const { email, password } = body;
   if (!email) {
-    throw new AppError('"email" is empty', 400)
+    throw new AppError('"email" is empty', 400);
   }
   if (!password) {
-    throw new AppError('"password" is empty', 400)
+    throw new AppError('"password" is empty', 400);
   }
 
   await handler.login({ email, password });

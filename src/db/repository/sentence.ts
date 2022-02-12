@@ -1,10 +1,5 @@
 import { Model } from "../../deps.ts";
-import {
-  Japanese,
-  Sentence,
-  TagChallenge,
-  TagSentence,
-} from "../models.ts";
+import { Japanese, Sentence, TagChallenge, TagSentence } from "../models.ts";
 import { getAllBySentenceId } from "./japanese.ts";
 
 type SentenceEntity = {

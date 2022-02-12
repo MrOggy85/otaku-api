@@ -3,7 +3,7 @@ import initDb from "./db/initDb.ts";
 import initServer from "./server.ts";
 import getEnv from "./getEnv.ts";
 
-if (getEnv('RUN_DIAGNOSTICS') === "1") {
+if (getEnv("RUN_DIAGNOSTICS") === "1") {
   printDiagnostic();
 }
 

@@ -12,11 +12,11 @@ import {
 } from "./models.ts";
 import seedData from "./seedData.ts";
 
-const DB_USER = getEnv('DB_USER');
-const DB_PASSWORD = getEnv('DB_PASSWORD');
-const DB_NAME = getEnv('DB_NAME');
-const DB_HOST = getEnv('DB_HOST');
-const DB_PORT = Number(getEnv('DB_PORT'));
+const DB_USER = getEnv("DB_USER");
+const DB_PASSWORD = getEnv("DB_PASSWORD");
+const DB_NAME = getEnv("DB_NAME");
+const DB_HOST = getEnv("DB_HOST");
+const DB_PORT = Number(getEnv("DB_PORT"));
 
 async function initDb() {
   const connector = new PostgresConnector({
@@ -25,7 +25,7 @@ async function initDb() {
     database: DB_NAME,
     host: DB_HOST,
     port: DB_PORT,
-  })
+  });
 
   const db = new Database({
     connector,

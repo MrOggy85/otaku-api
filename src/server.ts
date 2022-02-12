@@ -1,4 +1,10 @@
-import { Application, Context, Router, PostgresError, ConnectionError } from "./deps.ts";
+import {
+  Application,
+  ConnectionError,
+  Context,
+  PostgresError,
+  Router,
+} from "./deps.ts";
 import initChallengesRoutes from "./challenges/route.ts";
 import initTagsRoutes from "./tags/route.ts";
 import initSentencesRoutes from "./sentences/route.ts";
