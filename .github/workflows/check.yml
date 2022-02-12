@@ -25,7 +25,7 @@ jobs:
       - name: Setup Deno
         uses: denolib/setup-deno@v2
         with:
-          deno-version: 1.8.0
+          deno-version: 1.17.1
 
       - name: Cache Dependencies
         run: deno cache src/deps.ts
