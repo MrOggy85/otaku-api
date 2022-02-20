@@ -1,6 +1,6 @@
-import { Context, Router } from "../deps.ts";
+import { Context, Router, RouterContext } from "../deps.ts";
 import AppError from "../AppError.ts";
-import { getIdParam } from "../routeValidation.ts";
+import { getIdParamAsNumber } from "../routeValidation.ts";
 import * as handler from "./handler.ts";
 
 const ROUTE = "/guess";
@@ -10,8 +10,9 @@ async function getAll(ctx: Context) {
   ctx.response.body = models;
 }
 
-async function getById(ctx: Context) {
-  const id = getIdParam(ctx);
+type GetByIdContext = RouterContext<"/guess/:id", { id: string }>;
+async function getById(ctx: GetByIdContext) {
+  const id = getIdParamAsNumber(ctx.params.id);
 
   const model = await handler.getById(Number(id));
   ctx.response.body = model;
@@ -52,13 +53,9 @@ async function update(ctx: Context) {
   });
   const { id, sentenceId, challengeId, correct }: UpdateModel = await result
     .value;
-  if (!id) {
-    throw new AppError('"id" is empty', 400);
-  }
-  const idAsNumber = Number(id);
-  if (!Number.isInteger(idAsNumber)) {
-    throw new AppError('"id" is not a number', 400);
-  }
+
+  const idAsNumber = getIdParamAsNumber(id);
+
   if (!sentenceId) {
     throw new AppError('"sentenceId" is empty', 400);
   }
@@ -79,8 +76,9 @@ async function update(ctx: Context) {
   ctx.response.body = true;
 }
 
-async function remove(ctx: Context) {
-  const id = getIdParam(ctx);
+type RemoveContext = RouterContext<"/guess/:id", { id: string }>;
+async function remove(ctx: RemoveContext) {
+  const id = getIdParamAsNumber(ctx.params.id);
 
   await handler.remove(id);
 

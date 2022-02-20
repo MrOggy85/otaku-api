@@ -1,6 +1,6 @@
 import AppError from "../AppError.ts";
-import { Context, PostgresError, Router } from "../deps.ts";
-import { getIdParam } from "../routeValidation.ts";
+import { Context, PostgresError, Router, RouterContext } from "../deps.ts";
+import { getIdParamAsNumber } from "../routeValidation.ts";
 import * as handler from "./handler.ts";
 
 const ROUTE = "/sentences";
@@ -11,8 +11,9 @@ async function getAll(ctx: Context) {
   ctx.response.body = models;
 }
 
-async function getById(ctx: Context) {
-  const id = getIdParam(ctx);
+type GetByIdContext = RouterContext<"/sentences/:id", { id: string }>;
+async function getById(ctx: GetByIdContext) {
+  const id = getIdParamAsNumber(ctx.params.id);
 
   try {
     const model = await handler.getById(id);
@@ -58,13 +59,9 @@ async function update(ctx: Context) {
     type: "json",
   });
   const { id, en, ja, tagIds }: UpdateModel = await result.value;
-  if (!id) {
-    throw new AppError('"id" is empty', 400);
-  }
-  const idAsNumber = Number(id);
-  if (!Number.isInteger(idAsNumber)) {
-    throw new AppError('"id" is not a number', 400);
-  }
+
+  const idAsNumber = getIdParamAsNumber(id);
+
   if (!en) {
     throw new AppError('"name" is empty', 400);
   }
@@ -85,9 +82,9 @@ async function update(ctx: Context) {
   ctx.response.body = true;
 }
 
-async function remove(ctx: Context) {
-  const id = getIdParam(ctx);
-
+type RemoveContext = RouterContext<"/sentences/:id", { id: string }>;
+async function remove(ctx: RemoveContext) {
+  const id = getIdParamAsNumber(ctx.params.id);
   await handler.remove(id);
 
   ctx.response.body = true;

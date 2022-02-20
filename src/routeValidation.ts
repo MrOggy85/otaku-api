@@ -1,8 +1,6 @@
-import { Context, helpers } from "./deps.ts";
 import AppError from "./AppError.ts";
 
-export function getIdParam(ctx: Context) {
-  const id = helpers.getQuery(ctx).id;
+export function getIdParamAsNumber(id: string | undefined) {
   if (!id) {
     throw new AppError("no id provided", 400);
   }
