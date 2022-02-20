@@ -12,6 +12,7 @@ import initGuessRoutes from "./guess/route.ts";
 import initUserRoutes from "./user/route.ts";
 import initAuthRoutes from "./auth/routes.ts";
 import AppError from "./AppError.ts";
+import initDb from "./db/initDb.ts";
 
 function logger(ctx: Context) {
   console.log(
@@ -27,8 +28,6 @@ function initServer() {
   });
 
   app.use(async (ctx, next) => {
-    let isFatal = false;
-
     try {
       await next();
     } catch (err) {
@@ -48,7 +47,7 @@ function initServer() {
 
       if (err instanceof ConnectionError) {
         // e.g. The session was terminated by the database
-        isFatal = true;
+        await initDb();
       }
 
       console.error(err);
@@ -56,11 +55,6 @@ function initServer() {
       ctx.response.body = "Internal Server Error";
     } finally {
       logger(ctx);
-      if (isFatal) {
-        setTimeout(() => {
-          Deno.exit(1);
-        }, 1);
-      }
     }
   });
 
